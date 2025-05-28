@@ -294,6 +294,45 @@ export type Database = {
         }
         Relationships: []
       }
+      revenues: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          description: string
+          id: string
+          notes: string | null
+          property: string | null
+          revenue_date: string
+          source: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          notes?: string | null
+          property?: string | null
+          revenue_date: string
+          source?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          notes?: string | null
+          property?: string | null
+          revenue_date?: string
+          source?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tickets: {
         Row: {
           category: string
