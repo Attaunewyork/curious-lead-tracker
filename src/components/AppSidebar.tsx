@@ -1,5 +1,5 @@
 
-import { Calculator, Building, Wrench, Users, UserPlus, Building2, PlusCircle, BarChart3, Home, Settings } from "lucide-react";
+import { Calculator, Building, Wrench, Users, UserPlus, FileText, ClipboardList, Receipt, Home, Settings } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 
@@ -20,9 +20,19 @@ const items = [
     icon: Building
   },
   {
+    title: "Cadastro de Locação",
+    url: "/rental-registration",
+    icon: FileText
+  },
+  {
     title: "Sistema de Chamados",
     url: "/tickets",
     icon: Wrench
+  },
+  {
+    title: "Cadastro de Chamados",
+    url: "/ticket-registration",
+    icon: ClipboardList
   },
   {
     title: "Cadastro de Clientes",
@@ -35,19 +45,9 @@ const items = [
     icon: UserPlus
   },
   {
-    title: "Seus Imóveis",
-    url: "/properties",
-    icon: Building2
-  },
-  {
-    title: "Novo Imóvel",
-    url: "/properties/new",
-    icon: PlusCircle
-  },
-  {
-    title: "Relatórios",
-    url: "/reports",
-    icon: BarChart3
+    title: "Cadastro de Despesas",
+    url: "/expenses",
+    icon: Receipt
   },
   {
     title: "Configurações",

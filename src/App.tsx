@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +8,8 @@ import { Layout } from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Financial from "./pages/Financial";
 import Rentals from "./pages/Rentals";
+import RentalRegistration from "./pages/RentalRegistration";
+import TicketRegistration from "./pages/TicketRegistration";
 import Tickets from "./pages/Tickets";
 import Clients from "./pages/Clients";
 import Employees from "./pages/Employees";
@@ -18,6 +19,7 @@ import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import Expenses from "./pages/Expenses";
 
 const App = () => {
   // Create QueryClient inside the component to ensure proper React context
@@ -44,9 +46,12 @@ const App = () => {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/financial" element={<Financial />} />
                   <Route path="/rentals" element={<Rentals />} />
+                  <Route path="/rental-registration" element={<RentalRegistration />} />
                   <Route path="/tickets" element={<Tickets />} />
+                  <Route path="/ticket-registration" element={<TicketRegistration />} />
                   <Route path="/clients" element={<Clients />} />
                   <Route path="/employees" element={<Employees />} />
+                  <Route path="/expenses" element={<Expenses />} />
                   <Route path="/properties" element={<Properties />} />
                   <Route path="/properties/new" element={<NewProperty />} />
                   <Route path="/reports" element={<Reports />} />
