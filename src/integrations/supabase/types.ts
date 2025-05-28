@@ -9,7 +9,87 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      leads: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          source: string | null
+          status: string
+          updated_at: string
+          value: number | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+          value?: number | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+          value?: number | null
+        }
+        Relationships: []
+      }
+      webhook_logs: {
+        Row: {
+          body: Json | null
+          created_at: string
+          endpoint: string
+          headers: Json | null
+          id: string
+          ip_address: string | null
+          method: string
+          response_body: Json | null
+          response_status: number | null
+          user_agent: string | null
+        }
+        Insert: {
+          body?: Json | null
+          created_at?: string
+          endpoint: string
+          headers?: Json | null
+          id?: string
+          ip_address?: string | null
+          method: string
+          response_body?: Json | null
+          response_status?: number | null
+          user_agent?: string | null
+        }
+        Update: {
+          body?: Json | null
+          created_at?: string
+          endpoint?: string
+          headers?: Json | null
+          id?: string
+          ip_address?: string | null
+          method?: string
+          response_body?: Json | null
+          response_status?: number | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

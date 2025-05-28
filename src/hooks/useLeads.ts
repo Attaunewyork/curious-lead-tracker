@@ -1,97 +1,165 @@
 
 import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { Lead, LeadStatus } from '@/types/lead';
-
-// Dados de exemplo para demonstração
-const sampleLeads: Lead[] = [
-  {
-    id: '1',
-    name: 'João Silva',
-    email: 'joao@empresa.com',
-    phone: '(11) 99999-9999',
-    company: 'Tech Solutions',
-    status: 'new',
-    source: 'Website',
-    value: 15000,
-    notes: 'Interessado em nossos serviços de consultoria',
-    createdAt: '2024-01-15',
-    updatedAt: '2024-01-15'
-  },
-  {
-    id: '2',
-    name: 'Maria Santos',
-    email: 'maria@startup.com',
-    phone: '(11) 88888-8888',
-    company: 'Startup Inovadora',
-    status: 'qualified',
-    source: 'LinkedIn',
-    value: 25000,
-    notes: 'Precisa de implementação completa',
-    createdAt: '2024-01-10',
-    updatedAt: '2024-01-20'
-  },
-  {
-    id: '3',
-    name: 'Pedro Costa',
-    email: 'pedro@industria.com',
-    phone: '(11) 77777-7777',
-    company: 'Indústria ABC',
-    status: 'proposal',
-    source: 'Indicação',
-    value: 50000,
-    notes: 'Projeto grande, multiple fases',
-    createdAt: '2024-01-05',
-    updatedAt: '2024-01-25'
-  }
-];
+import { useToast } from '@/hooks/use-toast';
 
 export function useLeads() {
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
-  useEffect(() => {
-    // Simula carregamento de dados
-    const timer = setTimeout(() => {
-      const savedLeads = localStorage.getItem('crm-leads');
-      if (savedLeads) {
-        setLeads(JSON.parse(savedLeads));
-      } else {
-        setLeads(sampleLeads);
-        localStorage.setItem('crm-leads', JSON.stringify(sampleLeads));
+  // Fetch leads from Supabase
+  const { data: leads = [], isLoading: loading, error } = useQuery({
+    queryKey: ['leads'],
+    queryFn: async () => {
+      console.log('Fetching leads from Supabase...');
+      const { data, error } = await supabase
+        .from('leads')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching leads:', error);
+        throw error;
       }
-      setLoading(false);
-    }, 500);
 
-    return () => clearTimeout(timer);
-  }, []);
+      console.log('Fetched leads:', data);
+      return data || [];
+    },
+  });
+
+  // Add lead mutation
+  const addLeadMutation = useMutation({
+    mutationFn: async (lead: Omit<Lead, 'id' | 'createdAt' | 'updatedAt'>) => {
+      console.log('Adding lead:', lead);
+      const { data, error } = await supabase
+        .from('leads')
+        .insert({
+          name: lead.name,
+          email: lead.email,
+          phone: lead.phone,
+          company: lead.company,
+          status: lead.status,
+          source: lead.source,
+          value: lead.value,
+          notes: lead.notes
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error adding lead:', error);
+        throw error;
+      }
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      toast({
+        title: "Lead adicionado",
+        description: "O lead foi criado com sucesso.",
+      });
+    },
+    onError: (error) => {
+      console.error('Failed to add lead:', error);
+      toast({
+        title: "Erro",
+        description: "Falha ao criar o lead. Tente novamente.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Update lead mutation
+  const updateLeadMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Partial<Lead> }) => {
+      console.log('Updating lead:', id, updates);
+      const { data, error } = await supabase
+        .from('leads')
+        .update({
+          name: updates.name,
+          email: updates.email,
+          phone: updates.phone,
+          company: updates.company,
+          status: updates.status,
+          source: updates.source,
+          value: updates.value,
+          notes: updates.notes,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error updating lead:', error);
+        throw error;
+      }
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      toast({
+        title: "Lead atualizado",
+        description: "O lead foi atualizado com sucesso.",
+      });
+    },
+    onError: (error) => {
+      console.error('Failed to update lead:', error);
+      toast({
+        title: "Erro",
+        description: "Falha ao atualizar o lead. Tente novamente.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete lead mutation
+  const deleteLeadMutation = useMutation({
+    mutationFn: async (id: string) => {
+      console.log('Deleting lead:', id);
+      const { error } = await supabase
+        .from('leads')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        console.error('Error deleting lead:', error);
+        throw error;
+      }
+
+      return id;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      toast({
+        title: "Lead excluído",
+        description: "O lead foi removido com sucesso.",
+      });
+    },
+    onError: (error) => {
+      console.error('Failed to delete lead:', error);
+      toast({
+        title: "Erro",
+        description: "Falha ao excluir o lead. Tente novamente.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const addLead = (lead: Omit<Lead, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newLead: Lead = {
-      ...lead,
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString().split('T')[0],
-      updatedAt: new Date().toISOString().split('T')[0]
-    };
-    
-    const updatedLeads = [...leads, newLead];
-    setLeads(updatedLeads);
-    localStorage.setItem('crm-leads', JSON.stringify(updatedLeads));
+    addLeadMutation.mutate(lead);
   };
 
   const updateLead = (id: string, updates: Partial<Lead>) => {
-    const updatedLeads = leads.map(lead => 
-      lead.id === id 
-        ? { ...lead, ...updates, updatedAt: new Date().toISOString().split('T')[0] }
-        : lead
-    );
-    setLeads(updatedLeads);
-    localStorage.setItem('crm-leads', JSON.stringify(updatedLeads));
+    updateLeadMutation.mutate({ id, updates });
   };
 
   const deleteLead = (id: string) => {
-    const updatedLeads = leads.filter(lead => lead.id !== id);
-    setLeads(updatedLeads);
-    localStorage.setItem('crm-leads', JSON.stringify(updatedLeads));
+    deleteLeadMutation.mutate(id);
   };
 
   const getLeadsByStatus = (status: LeadStatus) => {
@@ -99,7 +167,7 @@ export function useLeads() {
   };
 
   const getTotalValue = () => {
-    return leads.reduce((total, lead) => total + lead.value, 0);
+    return leads.reduce((total, lead) => total + (lead.value || 0), 0);
   };
 
   const getStatusStats = () => {
@@ -114,7 +182,7 @@ export function useLeads() {
     };
 
     leads.forEach(lead => {
-      stats[lead.status]++;
+      stats[lead.status as LeadStatus]++;
     });
 
     return stats;
@@ -123,6 +191,7 @@ export function useLeads() {
   return {
     leads,
     loading,
+    error,
     addLead,
     updateLead,
     deleteLead,

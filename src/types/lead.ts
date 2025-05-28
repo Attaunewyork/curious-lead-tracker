@@ -3,14 +3,14 @@ export interface Lead {
   id: string;
   name: string;
   email: string;
-  phone: string;
-  company: string;
+  phone: string | null;
+  company: string | null;
   status: LeadStatus;
-  source: string;
+  source: string | null;
   value: number;
-  notes: string;
-  createdAt: string;
-  updatedAt: string;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost';
