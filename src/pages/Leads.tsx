@@ -98,7 +98,7 @@ export default function Leads() {
           <div className="w-24 h-24 bg-gradient-to-r from-[#FF8360]/20 to-[#FF3C7E]/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <Users className="w-12 h-12 text-[#FF8360]" />
           </div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">
+          <h3 className="text-lg font-semibold mb-2 text-brand-gradient">
             {searchTerm || statusFilter !== 'all' ? 'Nenhum lead encontrado' : 'Nenhum lead cadastrado'}
           </h3>
           <p className="text-muted-foreground mb-6">

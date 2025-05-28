@@ -1,11 +1,14 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WebhookInfo } from "@/components/WebhookInfo";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Settings as SettingsIcon, Webhook, Database } from "lucide-react";
+
 export default function Settings() {
-  return <div className="space-y-6">
+  return (
+    <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <SettingsIcon className="w-8 h-8 text-brand-orange" />
+        <SettingsIcon className="w-8 h-8 text-brand-gradient" />
         <div>
           <h1 className="text-3xl font-bold text-brand-gradient">Configurações</h1>
           <p className="text-muted-foreground">Gerencie as configurações do seu CRM</p>
@@ -13,12 +16,12 @@ export default function Settings() {
       </div>
 
       <Tabs defaultValue="webhook" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 bg-zinc-950">
-          <TabsTrigger value="webhook" className="flex items-center gap-2 text-zinc-50 bg-zinc-950 hover:bg-zinc-800">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="webhook" className="flex items-center gap-2">
             <Webhook className="w-4 h-4" />
             Webhook API
           </TabsTrigger>
-          <TabsTrigger value="database" className="flex items-center gap-2 bg-zinc-950 hover:bg-zinc-800">
+          <TabsTrigger value="database" className="flex items-center gap-2">
             <Database className="w-4 h-4" />
             Banco de Dados
           </TabsTrigger>
@@ -33,22 +36,22 @@ export default function Settings() {
             <CardHeader>
               <CardTitle className="text-brand-gradient">Status do Banco de Dados</CardTitle>
             </CardHeader>
-            <CardContent className="bg-zinc-950">
+            <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-foreground">Conexão Supabase:</span>
+                  <span className="text-sm font-medium">Conexão Supabase:</span>
                   <span className="text-green-600 font-semibold">✓ Conectado</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-foreground">Tabela de Leads:</span>
+                  <span className="text-sm font-medium">Tabela de Leads:</span>
                   <span className="text-green-600 font-semibold">✓ Configurada</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-foreground">Logs de Webhook:</span>
+                  <span className="text-sm font-medium">Logs de Webhook:</span>
                   <span className="text-green-600 font-semibold">✓ Ativo</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-foreground">RLS (Row Level Security):</span>
+                  <span className="text-sm font-medium">RLS (Row Level Security):</span>
                   <span className="text-green-600 font-semibold">✓ Habilitado</span>
                 </div>
               </div>
@@ -56,5 +59,6 @@ export default function Settings() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>;
+    </div>
+  );
 }
