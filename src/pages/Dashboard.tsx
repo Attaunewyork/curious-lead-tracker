@@ -108,7 +108,7 @@ export default function Dashboard() {
                     <p className="text-sm font-semibold text-green-600">
                       {formatCurrency(lead.value)}
                     </p>
-                    <p className="text-xs text-gray-500">{lead.createdAt}</p>
+                    <p className="text-xs text-gray-500">{lead.created_at}</p>
                   </div>
                 </div>
               ))}

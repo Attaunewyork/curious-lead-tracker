@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -40,7 +39,19 @@ export default function NewLead() {
       return;
     }
 
-    addLead(formData);
+    // Create lead data matching the expected type
+    const leadData = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone || null,
+      company: formData.company || null,
+      status: formData.status,
+      source: formData.source || null,
+      value: formData.value,
+      notes: formData.notes || null
+    };
+
+    addLead(leadData);
     toast({
       title: "Lead criado",
       description: "O lead foi adicionado com sucesso.",

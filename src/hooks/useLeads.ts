@@ -25,13 +25,17 @@ export function useLeads() {
       }
 
       console.log('Fetched leads:', data);
-      return data || [];
+      // Convert the data to match our Lead interface
+      return (data || []).map(lead => ({
+        ...lead,
+        status: lead.status as LeadStatus
+      })) as Lead[];
     },
   });
 
   // Add lead mutation
   const addLeadMutation = useMutation({
-    mutationFn: async (lead: Omit<Lead, 'id' | 'createdAt' | 'updatedAt'>) => {
+    mutationFn: async (lead: Omit<Lead, 'id' | 'created_at' | 'updated_at'>) => {
       console.log('Adding lead:', lead);
       const { data, error } = await supabase
         .from('leads')
@@ -150,7 +154,7 @@ export function useLeads() {
     },
   });
 
-  const addLead = (lead: Omit<Lead, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const addLead = (lead: Omit<Lead, 'id' | 'created_at' | 'updated_at'>) => {
     addLeadMutation.mutate(lead);
   };
 
