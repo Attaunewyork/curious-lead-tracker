@@ -35,21 +35,23 @@ export function AppSidebar() {
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${
       isActive 
-        ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105" 
-        : "hover:bg-blue-50 text-gray-700 hover:text-blue-600"
+        ? "bg-brand-gradient text-white shadow-lg transform scale-105" 
+        : "hover:bg-blue-50 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 hover:text-brand-orange dark:hover:text-brand-orange"
     }`;
 
   return (
-    <Sidebar className={`${collapsed ? "w-16" : "w-64"} border-r bg-white/80 backdrop-blur-sm`}>
+    <Sidebar className={`${collapsed ? "w-16" : "w-64"} border-r bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm`}>
       <SidebarContent className="p-4">
         <div className="mb-6">
           <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-              <BarChart3 className="w-5 h-5 text-white" />
-            </div>
+            <img 
+              src="/lovable-uploads/7cf36992-8d96-4c07-8be8-7062cfc8eaca.png" 
+              alt="ImovAI Logo" 
+              className="w-8 h-8 rounded-full"
+            />
             {!collapsed && (
-              <span className="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                CRM Pro
+              <span className="font-bold text-lg bg-brand-gradient bg-clip-text text-transparent">
+                ImovAI
               </span>
             )}
           </div>
