@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 export function WebhookInfo() {
   const { toast } = useToast();
 
-  const webhookUrl = 'https://ijfkhyeljrxbkspgqewl.supabase.co/functions/v1/webhook-lead';
+  const webhookUrl = 'https://ijfkhyeljrxbkspgqewl.supabase.co/functions/v1/webhook-client';
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -20,13 +20,14 @@ export function WebhookInfo() {
 
   const examplePayload = {
     name: "João Silva",
-    email: "joao@empresa.com",
+    cpf_cnpj: "000.000.000-00",
     phone: "(11) 99999-9999",
-    company: "Tech Solutions",
-    status: "new",
-    source: "Website",
-    value: 15000,
-    notes: "Interessado em consultoria"
+    email: "joao@empresa.com",
+    address: "Rua das Flores, 123",
+    city: "São Paulo",
+    state: "SP",
+    zip_code: "01234-567",
+    observations: "Cliente interessado em locação"
   };
 
   return (
@@ -35,7 +36,7 @@ export function WebhookInfo() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-brand-gradient">
             <Webhook className="w-5 h-5" />
-            API Webhook
+            API Webhook - Clientes
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -72,6 +73,7 @@ export function WebhookInfo() {
             <div className="flex gap-2">
               <Badge variant="destructive">name</Badge>
               <Badge variant="destructive">email</Badge>
+              <Badge variant="destructive">cpf_cnpj</Badge>
             </div>
           </div>
 
@@ -81,11 +83,11 @@ export function WebhookInfo() {
             </label>
             <div className="flex gap-2 flex-wrap">
               <Badge variant="secondary">phone</Badge>
-              <Badge variant="secondary">company</Badge>
-              <Badge variant="secondary">status</Badge>
-              <Badge variant="secondary">source</Badge>
-              <Badge variant="secondary">value</Badge>
-              <Badge variant="secondary">notes</Badge>
+              <Badge variant="secondary">address</Badge>
+              <Badge variant="secondary">city</Badge>
+              <Badge variant="secondary">state</Badge>
+              <Badge variant="secondary">zip_code</Badge>
+              <Badge variant="secondary">observations</Badge>
             </div>
           </div>
         </CardContent>
