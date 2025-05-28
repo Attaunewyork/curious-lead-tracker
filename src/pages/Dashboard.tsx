@@ -1,8 +1,10 @@
+
 import { Users, DollarSign, TrendingUp, Target } from 'lucide-react';
 import { StatCard } from '@/components/StatCard';
 import { useLeads } from '@/hooks/useLeads';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { leadStatusLabels } from '@/types/lead';
+
 export default function Dashboard() {
   const {
     leads,
@@ -10,20 +12,24 @@ export default function Dashboard() {
     getTotalValue,
     getStatusStats
   } = useLeads();
+
   if (loading) {
     return <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF8360]"></div>
       </div>;
   }
+
   const totalValue = getTotalValue();
   const statusStats = getStatusStats();
   const conversionRate = leads.length > 0 ? Math.round(statusStats['closed-won'] / leads.length * 100) : 0;
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'
     }).format(value);
   };
+
   return <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-brand-gradient mb-2">Dashboard</h1>
@@ -52,11 +58,11 @@ export default function Dashboard() {
 
       {/* Pipeline por status */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader className="bg-zinc-950">
+        <Card className="bg-background border-border">
+          <CardHeader>
             <CardTitle className="text-brand-gradient">Pipeline por Status</CardTitle>
           </CardHeader>
-          <CardContent className="bg-zinc-950">
+          <CardContent>
             <div className="space-y-4">
               {Object.entries(statusStats).map(([status, count]) => <div key={status} className="flex items-center justify-between">
                   <span className="text-sm font-medium text-foreground">
@@ -77,7 +83,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-950">
+        <Card className="bg-background border-border">
           <CardHeader>
             <CardTitle className="text-brand-gradient">Leads Recentes</CardTitle>
           </CardHeader>

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Brain, FileText, Download } from 'lucide-react';
@@ -16,14 +15,7 @@ export function AIReportGenerator() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [generatedContent, setGeneratedContent] = useState('');
-  const [proposalData, setProposalData] = useState({
-    clientName: '',
-    clientCompany: '',
-    projectDescription: '',
-    solution: '',
-    investment: '',
-    timeline: ''
-  });
+  const [proposalInfo, setProposalInfo] = useState('');
 
   const generateFullReport = async () => {
     setLoading(true);
@@ -62,10 +54,10 @@ export function AIReportGenerator() {
   };
 
   const generateProposal = async () => {
-    if (!proposalData.clientName || !proposalData.clientCompany) {
+    if (!proposalInfo.trim()) {
       toast({
-        title: "Campos obrigatórios",
-        description: "Preencha pelo menos o nome e empresa do cliente.",
+        title: "Campo obrigatório",
+        description: "Preencha as informações para gerar a proposta.",
         variant: "destructive"
       });
       return;
@@ -76,7 +68,7 @@ export function AIReportGenerator() {
       const { data, error } = await supabase.functions.invoke('ai-reports', {
         body: {
           type: 'proposal',
-          customData: proposalData
+          customData: { proposalInfo }
         }
       });
 
@@ -165,67 +157,17 @@ export function AIReportGenerator() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="clientName" className="text-foreground">Nome do Cliente *</Label>
-                  <Input
-                    id="clientName"
-                    value={proposalData.clientName}
-                    onChange={(e) => setProposalData({ ...proposalData, clientName: e.target.value })}
-                    placeholder="João Silva"
-                    className="bg-background border-border text-foreground"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="clientCompany" className="text-foreground">Empresa do Cliente *</Label>
-                  <Input
-                    id="clientCompany"
-                    value={proposalData.clientCompany}
-                    onChange={(e) => setProposalData({ ...proposalData, clientCompany: e.target.value })}
-                    placeholder="Tech Solutions Ltda"
-                    className="bg-background border-border text-foreground"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="investment" className="text-foreground">Investimento</Label>
-                  <Input
-                    id="investment"
-                    value={proposalData.investment}
-                    onChange={(e) => setProposalData({ ...proposalData, investment: e.target.value })}
-                    placeholder="R$ 15.000,00"
-                    className="bg-background border-border text-foreground"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="timeline" className="text-foreground">Prazo</Label>
-                  <Input
-                    id="timeline"
-                    value={proposalData.timeline}
-                    onChange={(e) => setProposalData({ ...proposalData, timeline: e.target.value })}
-                    placeholder="30 dias"
-                    className="bg-background border-border text-foreground"
-                  />
-                </div>
-              </div>
+              <p className="text-foreground">
+                Descreva as informações do cliente e do projeto para gerar uma proposta comercial profissional.
+              </p>
               <div>
-                <Label htmlFor="projectDescription" className="text-foreground">Descrição do Projeto</Label>
+                <Label htmlFor="proposalInfo" className="text-foreground">Informações da Proposta</Label>
                 <Textarea
-                  id="projectDescription"
-                  value={proposalData.projectDescription}
-                  onChange={(e) => setProposalData({ ...proposalData, projectDescription: e.target.value })}
-                  placeholder="Descreva as necessidades e objetivos do cliente..."
-                  rows={3}
-                  className="bg-background border-border text-foreground"
-                />
-              </div>
-              <div>
-                <Label htmlFor="solution" className="text-foreground">Solução Proposta</Label>
-                <Textarea
-                  id="solution"
-                  value={proposalData.solution}
-                  onChange={(e) => setProposalData({ ...proposalData, solution: e.target.value })}
-                  placeholder="Descreva a solução que será oferecida..."
-                  rows={3}
+                  id="proposalInfo"
+                  value={proposalInfo}
+                  onChange={(e) => setProposalInfo(e.target.value)}
+                  placeholder="Descreva as informações relevantes para a proposta: nome do cliente, empresa, projeto, valor, prazo, etc."
+                  rows={6}
                   className="bg-background border-border text-foreground"
                 />
               </div>

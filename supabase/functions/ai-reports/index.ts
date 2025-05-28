@@ -39,18 +39,21 @@ serve(async (req) => {
       `;
     } else if (type === 'proposal') {
       prompt = `
-        Crie uma proposta comercial profissional baseada nos seguintes dados:
+        Crie uma proposta comercial profissional baseada nas seguintes informações:
         
-        ${JSON.stringify(customData)}
+        ${customData.proposalInfo}
         
         A proposta deve incluir:
         1. Apresentação da empresa
         2. Entendimento da necessidade do cliente
-        3. Solução proposta
-        4. Investimento
-        5. Próximos passos
+        3. Solução proposta detalhada
+        4. Investimento (se mencionado)
+        5. Cronograma (se mencionado)
+        6. Próximos passos
+        7. Termos e condições básicos
         
-        Use um tom profissional e persuasivo, formatando em markdown.
+        Use um tom profissional e persuasivo, formatando em markdown com seções bem estruturadas.
+        Extraia todas as informações relevantes do texto fornecido e organize de forma clara e atrativa.
       `;
     }
 
@@ -65,7 +68,7 @@ serve(async (req) => {
         messages: [
           { 
             role: 'system', 
-            content: 'Você é um especialista em vendas e relatórios comerciais. Gere conteúdo profissional, detalhado e baseado em dados reais.' 
+            content: 'Você é um especialista em vendas e relatórios comerciais. Gere conteúdo profissional, detalhado e baseado em dados reais. Use português brasileiro.' 
           },
           { role: 'user', content: prompt }
         ],

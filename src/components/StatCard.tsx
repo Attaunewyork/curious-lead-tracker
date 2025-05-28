@@ -1,5 +1,7 @@
+
 import { LucideIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+
 interface StatCardProps {
   title: string;
   value: string | number;
@@ -10,6 +12,7 @@ interface StatCardProps {
   };
   className?: string;
 }
+
 export function StatCard({
   title,
   value,
@@ -17,8 +20,8 @@ export function StatCard({
   trend,
   className = ""
 }: StatCardProps) {
-  return <Card className={`hover:shadow-lg transition-all duration-300 hover:scale-105 ${className}`}>
-      <CardContent className="p-6 bg-zinc-950">
+  return <Card className={`hover:shadow-lg transition-all duration-300 hover:scale-105 bg-background border-border ${className}`}>
+      <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
