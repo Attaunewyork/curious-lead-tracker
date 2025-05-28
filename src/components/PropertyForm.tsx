@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Property } from '@/hooks/useProperties';
+import { ImageUpload } from './ImageUpload';
 
 interface PropertyFormProps {
   property?: Property;
@@ -32,7 +33,8 @@ export function PropertyForm({ property, onSubmit, onCancel, loading }: Property
     parking_spaces: property?.parking_spaces?.toString() || '0',
     furnished: property?.furnished || false,
     available: property?.available !== false,
-    images: property?.images?.join(', ') || ''
+    images: property?.images || [],
+    featured_image: property?.images?.[0] || ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,13 +55,13 @@ export function PropertyForm({ property, onSubmit, onCancel, loading }: Property
       parking_spaces: parseInt(formData.parking_spaces) || 0,
       furnished: formData.furnished,
       available: formData.available,
-      images: formData.images ? formData.images.split(',').map(url => url.trim()).filter(url => url) : undefined
+      images: formData.images.length > 0 ? formData.images : undefined
     };
 
     onSubmit(data);
   };
 
-  const handleInputChange = (field: string, value: string | boolean) => {
+  const handleInputChange = (field: string, value: string | boolean | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -216,12 +218,12 @@ export function PropertyForm({ property, onSubmit, onCancel, loading }: Property
             </div>
 
             <div className="md:col-span-2">
-              <Label htmlFor="images">URLs das Imagens (separadas por vírgula)</Label>
-              <Input
-                id="images"
-                value={formData.images}
-                onChange={(e) => handleInputChange('images', e.target.value)}
-                placeholder="https://exemplo.com/imagem1.jpg, https://exemplo.com/imagem2.jpg"
+              <Label>Imagens do Imóvel</Label>
+              <ImageUpload
+                images={formData.images}
+                onImagesChange={(images) => handleInputChange('images', images)}
+                featuredImage={formData.featured_image}
+                onFeaturedImageChange={(imageUrl) => handleInputChange('featured_image', imageUrl)}
               />
             </div>
 

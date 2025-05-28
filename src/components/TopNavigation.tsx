@@ -1,5 +1,5 @@
 
-import { BarChart3, Users, Plus, Home, Settings, Building2, PlusCircle } from "lucide-react";
+import { Calculator, Building, Wrench, Users, UserPlus, Building2, PlusCircle, BarChart3, Home, Settings } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -10,14 +10,29 @@ const items = [
     icon: Home
   },
   {
-    title: "Leads",
-    url: "/leads",
+    title: "Gestão Financeira",
+    url: "/financial",
+    icon: Calculator
+  },
+  {
+    title: "Controle de Locação",
+    url: "/rentals",
+    icon: Building
+  },
+  {
+    title: "Sistema de Chamados",
+    url: "/tickets",
+    icon: Wrench
+  },
+  {
+    title: "Cadastro de Clientes",
+    url: "/clients",
     icon: Users
   },
   {
-    title: "Novo Lead",
-    url: "/leads/new",
-    icon: Plus
+    title: "Cadastro de Funcionários",
+    url: "/employees",
+    icon: UserPlus
   },
   {
     title: "Seus Imóveis",

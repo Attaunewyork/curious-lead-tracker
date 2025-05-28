@@ -6,8 +6,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
-import Leads from "./pages/Leads";
-import NewLead from "./pages/NewLead";
+import Financial from "./pages/Financial";
+import Rentals from "./pages/Rentals";
+import Tickets from "./pages/Tickets";
+import Clients from "./pages/Clients";
+import Employees from "./pages/Employees";
 import Properties from "./pages/Properties";
 import NewProperty from "./pages/NewProperty";
 import Reports from "./pages/Reports";
@@ -29,8 +32,11 @@ const App = () => (
             <Layout>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/leads" element={<Leads />} />
-                <Route path="/leads/new" element={<NewLead />} />
+                <Route path="/financial" element={<Financial />} />
+                <Route path="/rentals" element={<Rentals />} />
+                <Route path="/tickets" element={<Tickets />} />
+                <Route path="/clients" element={<Clients />} />
+                <Route path="/employees" element={<Employees />} />
                 <Route path="/properties" element={<Properties />} />
                 <Route path="/properties/new" element={<NewProperty />} />
                 <Route path="/reports" element={<Reports />} />
