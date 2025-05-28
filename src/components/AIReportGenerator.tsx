@@ -124,7 +124,7 @@ export function AIReportGenerator() {
         </TabsList>
 
         <TabsContent value="report">
-          <Card>
+          <Card className="bg-background border-border">
             <CardHeader>
               <CardTitle className="text-brand-gradient flex items-center gap-2">
                 <Brain className="w-5 h-5" />
@@ -132,12 +132,12 @@ export function AIReportGenerator() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground">
+              <p className="text-foreground">
                 Gere um relatório completo automaticamente usando todos os dados do seu CRM.
                 A IA analisará seus leads, vendas e métricas para criar insights valiosos.
               </p>
               <div className="bg-muted p-4 rounded-lg">
-                <p className="text-sm font-medium mb-2">Dados que serão analisados:</p>
+                <p className="text-sm font-medium mb-2 text-foreground">Dados que serão analisados:</p>
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• {leads.length} leads cadastrados</li>
                   <li>• Valor total do pipeline: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(getTotalValue())}</li>
@@ -148,7 +148,7 @@ export function AIReportGenerator() {
               <Button 
                 onClick={generateFullReport} 
                 disabled={loading || leads.length === 0}
-                className="w-full"
+                className="w-full bg-gradient-to-r from-[#FF8360] to-[#FF3C7E] hover:from-[#e6755a] hover:to-[#e63571] text-white"
               >
                 {loading ? 'Gerando relatório...' : 'Gerar Relatório Completo'}
               </Button>
@@ -157,7 +157,7 @@ export function AIReportGenerator() {
         </TabsContent>
 
         <TabsContent value="proposal">
-          <Card>
+          <Card className="bg-background border-border">
             <CardHeader>
               <CardTitle className="text-brand-gradient flex items-center gap-2">
                 <FileText className="w-5 h-5" />
@@ -167,66 +167,72 @@ export function AIReportGenerator() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="clientName">Nome do Cliente *</Label>
+                  <Label htmlFor="clientName" className="text-foreground">Nome do Cliente *</Label>
                   <Input
                     id="clientName"
                     value={proposalData.clientName}
                     onChange={(e) => setProposalData({ ...proposalData, clientName: e.target.value })}
                     placeholder="João Silva"
+                    className="bg-background border-border text-foreground"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="clientCompany">Empresa do Cliente *</Label>
+                  <Label htmlFor="clientCompany" className="text-foreground">Empresa do Cliente *</Label>
                   <Input
                     id="clientCompany"
                     value={proposalData.clientCompany}
                     onChange={(e) => setProposalData({ ...proposalData, clientCompany: e.target.value })}
                     placeholder="Tech Solutions Ltda"
+                    className="bg-background border-border text-foreground"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="investment">Investimento</Label>
+                  <Label htmlFor="investment" className="text-foreground">Investimento</Label>
                   <Input
                     id="investment"
                     value={proposalData.investment}
                     onChange={(e) => setProposalData({ ...proposalData, investment: e.target.value })}
                     placeholder="R$ 15.000,00"
+                    className="bg-background border-border text-foreground"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="timeline">Prazo</Label>
+                  <Label htmlFor="timeline" className="text-foreground">Prazo</Label>
                   <Input
                     id="timeline"
                     value={proposalData.timeline}
                     onChange={(e) => setProposalData({ ...proposalData, timeline: e.target.value })}
                     placeholder="30 dias"
+                    className="bg-background border-border text-foreground"
                   />
                 </div>
               </div>
               <div>
-                <Label htmlFor="projectDescription">Descrição do Projeto</Label>
+                <Label htmlFor="projectDescription" className="text-foreground">Descrição do Projeto</Label>
                 <Textarea
                   id="projectDescription"
                   value={proposalData.projectDescription}
                   onChange={(e) => setProposalData({ ...proposalData, projectDescription: e.target.value })}
                   placeholder="Descreva as necessidades e objetivos do cliente..."
                   rows={3}
+                  className="bg-background border-border text-foreground"
                 />
               </div>
               <div>
-                <Label htmlFor="solution">Solução Proposta</Label>
+                <Label htmlFor="solution" className="text-foreground">Solução Proposta</Label>
                 <Textarea
                   id="solution"
                   value={proposalData.solution}
                   onChange={(e) => setProposalData({ ...proposalData, solution: e.target.value })}
                   placeholder="Descreva a solução que será oferecida..."
                   rows={3}
+                  className="bg-background border-border text-foreground"
                 />
               </div>
               <Button 
                 onClick={generateProposal} 
                 disabled={loading}
-                className="w-full"
+                className="w-full bg-gradient-to-r from-[#FF8360] to-[#FF3C7E] hover:from-[#e6755a] hover:to-[#e63571] text-white"
               >
                 {loading ? 'Gerando proposta...' : 'Gerar Proposta Profissional'}
               </Button>
@@ -236,7 +242,7 @@ export function AIReportGenerator() {
       </Tabs>
 
       {generatedContent && (
-        <Card>
+        <Card className="bg-background border-border">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-brand-gradient">Conteúdo Gerado</CardTitle>
             <Button onClick={downloadContent} size="sm" variant="outline">
@@ -246,7 +252,7 @@ export function AIReportGenerator() {
           </CardHeader>
           <CardContent>
             <div className="bg-muted p-4 rounded-lg max-h-96 overflow-y-auto">
-              <pre className="whitespace-pre-wrap text-sm">{generatedContent}</pre>
+              <pre className="whitespace-pre-wrap text-sm text-foreground">{generatedContent}</pre>
             </div>
           </CardContent>
         </Card>
