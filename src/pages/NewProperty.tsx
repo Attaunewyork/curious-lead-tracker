@@ -3,8 +3,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PropertyForm } from '@/components/PropertyForm';
 import { useProperties, Property } from '@/hooks/useProperties';
-import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 export default function NewProperty() {
   const navigate = useNavigate();
@@ -29,14 +27,9 @@ export default function NewProperty() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => navigate('/properties')}>
-          <ArrowLeft className="w-4 h-4" />
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold text-brand-gradient">Cadastrar Novo Imóvel</h1>
-          <p className="text-muted-foreground">Adicione um novo imóvel ao seu portfólio</p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold text-brand-gradient">Cadastrar Novo Imóvel</h1>
+        <p className="text-muted-foreground">Adicione um novo imóvel ao seu portfólio</p>
       </div>
 
       <PropertyForm

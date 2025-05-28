@@ -1,12 +1,11 @@
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Menu } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { TopNavigation } from "@/components/TopNavigation";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,6 +14,7 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   const { user, loading, signOut, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -35,55 +35,72 @@ export function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <AppSidebar />
-        <main className="flex-1 flex flex-col">
-          <header className="h-16 border-b border-border backdrop-blur-sm shadow-sm flex items-center justify-between px-6 bg-background">
-            <div className="flex items-center">
-              <SidebarTrigger className="mr-4" />
-              <div className="flex items-center gap-3">
-                <img 
-                  src="/lovable-uploads/7cf36992-8d96-4c07-8be8-7062cfc8eaca.png" 
-                  alt="ImovAI Logo" 
-                  className="w-8 h-8 rounded-full" 
-                />
-                <h1 className="text-xl font-semibold text-brand-gradient">
-                  ImovAI - CRM
-                </h1>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              
-              {user && (
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 text-sm">
-                    <User className="w-4 h-4" />
-                    <span className="hidden sm:inline text-muted-foreground">
-                      {user.email}
-                    </span>
-                  </div>
-                  
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={signOut} 
-                    className="h-9 w-9"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span className="sr-only">Sair</span>
-                  </Button>
-                </div>
-              )}
-            </div>
-          </header>
-          <div className="flex-1 p-6 bg-background">
-            {children}
+    <div className="min-h-screen flex flex-col w-full bg-background">
+      <header className="h-16 border-b border-border backdrop-blur-sm shadow-sm flex items-center justify-between px-6 bg-background">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3">
+            <img 
+              src="/lovable-uploads/7cf36992-8d96-4c07-8be8-7062cfc8eaca.png" 
+              alt="ImovAI Logo" 
+              className="w-8 h-8 rounded-full" 
+            />
+            <h1 className="text-xl font-semibold text-brand-gradient">
+              ImovAI - CRM
+            </h1>
           </div>
-        </main>
-      </div>
-    </SidebarProvider>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:block">
+            <TopNavigation />
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          {/* Mobile Menu Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
+          
+          <ThemeToggle />
+          
+          {user && (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 text-sm">
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline text-muted-foreground">
+                  {user.email}
+                </span>
+              </div>
+              
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={signOut} 
+                className="h-9 w-9"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="sr-only">Sair</span>
+              </Button>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* Mobile Navigation Popup */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden border-b border-border bg-background shadow-lg">
+          <TopNavigation onItemClick={() => setIsMobileMenuOpen(false)} />
+        </div>
+      )}
+
+      <main className="flex-1 p-6 bg-background">
+        {children}
+      </main>
+    </div>
   );
 }
