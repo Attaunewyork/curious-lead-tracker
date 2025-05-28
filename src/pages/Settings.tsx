@@ -1,12 +1,9 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WebhookInfo } from "@/components/WebhookInfo";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Settings as SettingsIcon, Webhook, Database } from "lucide-react";
-
 export default function Settings() {
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div className="flex items-center gap-3">
         <SettingsIcon className="w-8 h-8 text-brand-orange" />
         <div>
@@ -16,12 +13,12 @@ export default function Settings() {
       </div>
 
       <Tabs defaultValue="webhook" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="webhook" className="flex items-center gap-2">
+        <TabsList className="grid w-full grid-cols-2 bg-zinc-950">
+          <TabsTrigger value="webhook" className="flex items-center gap-2 text-zinc-50 bg-zinc-950 hover:bg-zinc-800">
             <Webhook className="w-4 h-4" />
             Webhook API
           </TabsTrigger>
-          <TabsTrigger value="database" className="flex items-center gap-2">
+          <TabsTrigger value="database" className="flex items-center gap-2 bg-zinc-950 hover:bg-zinc-800">
             <Database className="w-4 h-4" />
             Banco de Dados
           </TabsTrigger>
@@ -36,7 +33,7 @@ export default function Settings() {
             <CardHeader>
               <CardTitle className="text-brand-gradient">Status do Banco de Dados</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="bg-zinc-950">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-foreground">Conexão Supabase:</span>
@@ -59,6 +56,5 @@ export default function Settings() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
-  );
+    </div>;
 }
