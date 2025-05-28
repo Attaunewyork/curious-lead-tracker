@@ -36,11 +36,11 @@ export function AppSidebar() {
     `flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${
       isActive 
         ? "bg-brand-gradient text-white shadow-lg transform scale-105" 
-        : "hover:bg-blue-50 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 hover:text-brand-orange dark:hover:text-brand-orange"
+        : "hover:bg-accent text-foreground hover:text-brand-orange"
     }`;
 
   return (
-    <Sidebar className={`${collapsed ? "w-16" : "w-64"} border-r bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm`}>
+    <Sidebar className={`${collapsed ? "w-16" : "w-64"} border-r bg-background/80 backdrop-blur-sm`}>
       <SidebarContent className="p-4">
         <div className="mb-6">
           <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
@@ -58,7 +58,7 @@ export function AppSidebar() {
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
+          <SidebarGroupLabel className={`${collapsed ? "sr-only" : ""} text-foreground`}>
             Navegação
           </SidebarGroupLabel>
           <SidebarGroupContent>

@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Plus, Search, Filter, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -43,7 +44,7 @@ export default function Leads() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF8360]"></div>
       </div>
     );
   }
@@ -52,12 +53,12 @@ export default function Leads() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Leads</h1>
-          <p className="text-gray-600">Gerencie todos os seus leads em um só lugar</p>
+          <h1 className="text-3xl font-bold text-brand-gradient mb-2">Leads</h1>
+          <p className="text-muted-foreground">Gerencie todos os seus leads em um só lugar</p>
         </div>
         <Button 
           onClick={() => navigate('/leads/new')}
-          className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg"
+          className="bg-gradient-to-r from-[#FF8360] to-[#FF3C7E] hover:from-[#e6755a] hover:to-[#e63571] text-white shadow-lg"
         >
           <Plus className="w-4 h-4 mr-2" />
           Novo Lead
@@ -67,7 +68,7 @@ export default function Leads() {
       {/* Filtros */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
             placeholder="Buscar leads..."
             value={searchTerm}
@@ -94,13 +95,13 @@ export default function Leads() {
       {/* Lista de leads */}
       {filteredLeads.length === 0 ? (
         <div className="text-center py-12">
-          <div className="w-24 h-24 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Users className="w-12 h-12 text-blue-500" />
+          <div className="w-24 h-24 bg-gradient-to-r from-[#FF8360]/20 to-[#FF3C7E]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Users className="w-12 h-12 text-[#FF8360]" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <h3 className="text-lg font-semibold text-foreground mb-2">
             {searchTerm || statusFilter !== 'all' ? 'Nenhum lead encontrado' : 'Nenhum lead cadastrado'}
           </h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             {searchTerm || statusFilter !== 'all' 
               ? 'Tente ajustar os filtros de busca' 
               : 'Comece adicionando seu primeiro lead'
@@ -109,7 +110,7 @@ export default function Leads() {
           {!searchTerm && statusFilter === 'all' && (
             <Button 
               onClick={() => navigate('/leads/new')}
-              className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+              className="bg-gradient-to-r from-[#FF8360] to-[#FF3C7E] hover:from-[#e6755a] hover:to-[#e63571] text-white"
             >
               <Plus className="w-4 h-4 mr-2" />
               Adicionar Lead

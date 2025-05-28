@@ -8,10 +8,10 @@ export default function Settings() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <SettingsIcon className="w-8 h-8 text-blue-600" />
+        <SettingsIcon className="w-8 h-8 text-brand-orange" />
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Configurações</h1>
-          <p className="text-gray-600">Gerencie as configurações do seu CRM</p>
+          <h1 className="text-3xl font-bold text-brand-gradient">Configurações</h1>
+          <p className="text-muted-foreground">Gerencie as configurações do seu CRM</p>
         </div>
       </div>
 
@@ -34,24 +34,24 @@ export default function Settings() {
         <TabsContent value="database" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Status do Banco de Dados</CardTitle>
+              <CardTitle className="text-brand-gradient">Status do Banco de Dados</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Conexão Supabase:</span>
+                  <span className="text-sm font-medium text-foreground">Conexão Supabase:</span>
                   <span className="text-green-600 font-semibold">✓ Conectado</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Tabela de Leads:</span>
+                  <span className="text-sm font-medium text-foreground">Tabela de Leads:</span>
                   <span className="text-green-600 font-semibold">✓ Configurada</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Logs de Webhook:</span>
+                  <span className="text-sm font-medium text-foreground">Logs de Webhook:</span>
                   <span className="text-green-600 font-semibold">✓ Ativo</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">RLS (Row Level Security):</span>
+                  <span className="text-sm font-medium text-foreground">RLS (Row Level Security):</span>
                   <span className="text-green-600 font-semibold">✓ Habilitado</span>
                 </div>
               </div>

@@ -24,7 +24,7 @@ export function Layout({ children }: LayoutProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-orange"></div>
       </div>
     );
@@ -36,10 +36,10 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
+      <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <main className="flex-1 flex flex-col">
-          <header className="h-16 border-b bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-sm flex items-center justify-between px-6">
+          <header className="h-16 border-b border-border bg-background/80 backdrop-blur-sm shadow-sm flex items-center justify-between px-6">
             <div className="flex items-center">
               <SidebarTrigger className="mr-4" />
               <div className="flex items-center gap-3">
@@ -61,7 +61,7 @@ export function Layout({ children }: LayoutProps) {
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2 text-sm">
                     <User className="w-4 h-4" />
-                    <span className="hidden sm:inline text-gray-600 dark:text-gray-300">
+                    <span className="hidden sm:inline text-muted-foreground">
                       {user.email}
                     </span>
                   </div>
@@ -79,7 +79,7 @@ export function Layout({ children }: LayoutProps) {
               )}
             </div>
           </header>
-          <div className="flex-1 p-6">
+          <div className="flex-1 p-6 bg-background">
             {children}
           </div>
         </main>
