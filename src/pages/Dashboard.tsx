@@ -11,7 +11,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-orange"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF8360]"></div>
       </div>
     );
   }
@@ -30,8 +30,8 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold bg-brand-gradient bg-clip-text text-transparent mb-2">Dashboard</h1>
-        <p className="text-gray-600 dark:text-gray-300">Visão geral do seu pipeline de vendas</p>
+        <h1 className="text-3xl font-bold text-brand-gradient mb-2">Dashboard</h1>
+        <p className="text-muted-foreground">Visão geral do seu pipeline de vendas</p>
       </div>
 
       {/* Estatísticas principais */}
@@ -64,25 +64,25 @@ export default function Dashboard() {
 
       {/* Pipeline por status */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
+        <Card>
           <CardHeader>
-            <CardTitle className="bg-brand-gradient bg-clip-text text-transparent">Pipeline por Status</CardTitle>
+            <CardTitle className="text-brand-gradient">Pipeline por Status</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {Object.entries(statusStats).map(([status, count]) => (
                 <div key={status} className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                  <span className="text-sm font-medium text-foreground">
                     {leadStatusLabels[status as keyof typeof leadStatusLabels]}
                   </span>
                   <div className="flex items-center gap-3">
-                    <div className="w-32 bg-gray-200 dark:bg-slate-600 rounded-full h-2">
+                    <div className="w-32 bg-muted rounded-full h-2">
                       <div 
-                        className="bg-brand-gradient h-2 rounded-full transition-all duration-300"
+                        className="bg-gradient-to-r from-[#FF8360] to-[#FF3C7E] h-2 rounded-full transition-all duration-300"
                         style={{ width: `${leads.length > 0 ? (count / leads.length) * 100 : 0}%` }}
                       />
                     </div>
-                    <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 min-w-[2rem]">
+                    <span className="text-sm font-semibold text-foreground min-w-[2rem]">
                       {count}
                     </span>
                   </div>
@@ -92,23 +92,23 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
+        <Card>
           <CardHeader>
-            <CardTitle className="bg-brand-gradient bg-clip-text text-transparent">Leads Recentes</CardTitle>
+            <CardTitle className="text-brand-gradient">Leads Recentes</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {leads.slice(0, 5).map((lead) => (
-                <div key={lead.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700 rounded-lg border border-gray-200 dark:border-slate-600">
+                <div key={lead.id} className="flex items-center justify-between p-3 bg-muted rounded-lg border">
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-gray-100">{lead.name}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">{lead.company}</p>
+                    <p className="font-medium text-foreground">{lead.name}</p>
+                    <p className="text-sm text-muted-foreground">{lead.company}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold bg-brand-gradient bg-clip-text text-transparent">
+                    <p className="text-sm font-semibold text-brand-gradient">
                       {formatCurrency(lead.value)}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{lead.created_at}</p>
+                    <p className="text-xs text-muted-foreground">{lead.created_at}</p>
                   </div>
                 </div>
               ))}
