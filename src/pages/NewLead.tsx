@@ -10,7 +10,6 @@ import { useLeads } from '@/hooks/useLeads';
 import { LeadStatus, leadStatusLabels } from '@/types/lead';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft } from 'lucide-react';
-
 export default function NewLead() {
   const [formData, setFormData] = useState({
     name: '',
@@ -22,19 +21,20 @@ export default function NewLead() {
     value: 0,
     notes: ''
   });
-
-  const { addLead } = useLeads();
+  const {
+    addLead
+  } = useLeads();
   const navigate = useNavigate();
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!formData.name || !formData.email) {
       toast({
         title: "Erro",
         description: "Nome e email são obrigatórios.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
@@ -50,113 +50,79 @@ export default function NewLead() {
       value: formData.value,
       notes: formData.notes || null
     };
-
     addLead(leadData);
     toast({
       title: "Lead criado",
-      description: "O lead foi adicionado com sucesso.",
+      description: "O lead foi adicionado com sucesso."
     });
     navigate('/leads');
   };
-
   const handleChange = (field: string, value: string | number) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => navigate('/leads')}
-          className="hover:bg-gray-50"
-        >
+        <Button variant="outline" size="sm" onClick={() => navigate('/leads')} className="text-zinc-50 bg-zinc-950 hover:bg-zinc-800">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
         </Button>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Novo Lead</h1>
-          <p className="text-gray-600">Adicione um novo lead ao seu pipeline</p>
+          <h1 className="text-3xl font-bold text-slate-50">Novo Lead</h1>
+          <p className="text-zinc-50">Adicione um novo lead ao seu pipeline</p>
         </div>
       </div>
 
-      <Card className="max-w-2xl">
-        <CardHeader>
+      <Card className="max-w-2xl bg-zinc-950">
+        <CardHeader className="bg-zinc-950">
           <CardTitle>Informações do Lead</CardTitle>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <CardContent className="bg-zinc-950">
+          <form onSubmit={handleSubmit} className="space-y-6 bg-zinc-950">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Nome *</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder="Nome completo"
-                  required
-                />
+                <Input id="name" value={formData.name} onChange={e => handleChange('name', e.target.value)} placeholder="Nome completo" required className="bg-zinc-950" />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleChange('email', e.target.value)}
-                  placeholder="email@exemplo.com"
-                  required
-                />
+                <Input id="email" type="email" value={formData.email} onChange={e => handleChange('email', e.target.value)} placeholder="email@exemplo.com" required className="bg-zinc-950" />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="phone">Telefone</Label>
-                <Input
-                  id="phone"
-                  value={formData.phone}
-                  onChange={(e) => handleChange('phone', e.target.value)}
-                  placeholder="(11) 99999-9999"
-                />
+                <Input id="phone" value={formData.phone} onChange={e => handleChange('phone', e.target.value)} placeholder="(11) 99999-9999" className="bg-zinc-950" />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="company">Empresa</Label>
-                <Input
-                  id="company"
-                  value={formData.company}
-                  onChange={(e) => handleChange('company', e.target.value)}
-                  placeholder="Nome da empresa"
-                />
+                <Input id="company" value={formData.company} onChange={e => handleChange('company', e.target.value)} placeholder="Nome da empresa" className="bg-zinc-950" />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value) => handleChange('status', value)}>
+                <Select value={formData.status} onValueChange={value => handleChange('status', value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.entries(leadStatusLabels).map(([value, label]) => (
-                      <SelectItem key={value} value={value}>
+                    {Object.entries(leadStatusLabels).map(([value, label]) => <SelectItem key={value} value={value}>
                         {label}
-                      </SelectItem>
-                    ))}
+                      </SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="source">Origem</Label>
-                <Select value={formData.source} onValueChange={(value) => handleChange('source', value)}>
+                <Select value={formData.source} onValueChange={value => handleChange('source', value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione a origem" />
                   </SelectTrigger>
@@ -176,47 +142,25 @@ export default function NewLead() {
 
               <div className="space-y-2">
                 <Label htmlFor="value">Valor Potencial (R$)</Label>
-                <Input
-                  id="value"
-                  type="number"
-                  value={formData.value}
-                  onChange={(e) => handleChange('value', Number(e.target.value))}
-                  placeholder="0"
-                  min="0"
-                />
+                <Input id="value" type="number" value={formData.value} onChange={e => handleChange('value', Number(e.target.value))} placeholder="0" min="0" className="bg-zinc-950" />
               </div>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="notes">Observações</Label>
-              <Textarea
-                id="notes"
-                value={formData.notes}
-                onChange={(e) => handleChange('notes', e.target.value)}
-                placeholder="Adicione observações sobre este lead..."
-                rows={4}
-              />
+              <Textarea id="notes" value={formData.notes} onChange={e => handleChange('notes', e.target.value)} placeholder="Adicione observações sobre este lead..." rows={4} className="bg-zinc-950" />
             </div>
 
             <div className="flex gap-4 pt-4">
-              <Button
-                type="submit"
-                className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 flex-1"
-              >
+              <Button type="submit" className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 flex-1 text-red-50 bg-red-500 hover:bg-red-400">
                 Criar Lead
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => navigate('/leads')}
-                className="flex-1"
-              >
+              <Button type="button" variant="outline" onClick={() => navigate('/leads')} className="flex-1 bg-zinc-950 hover:bg-zinc-800">
                 Cancelar
               </Button>
             </div>
           </form>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 }
