@@ -83,7 +83,7 @@ export function WebhookInfo() {
       </Card>
 
       <Card>
-        <CardHeader className="bg-zinc-950">
+        <CardHeader className="bg-zinc-950 hover:bg-zinc-800 text-zinc-50">
           <CardTitle>Exemplo de Payload</CardTitle>
         </CardHeader>
         <CardContent className="bg-zinc-950">
