@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,8 +43,13 @@ export default function Expenses() {
     setIsLoading(true);
     try {
       const expenseData = {
-        ...data,
+        description: data.description,
         amount: parseFloat(data.amount.replace(/[^\d.,]/g, '').replace(',', '.')),
+        category: data.category,
+        expense_date: data.expense_date,
+        property: data.property || undefined,
+        vendor: data.vendor || undefined,
+        notes: data.notes || undefined,
       };
       
       await createExpense(expenseData);
