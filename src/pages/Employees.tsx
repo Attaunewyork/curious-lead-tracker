@@ -1,5 +1,64 @@
 
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useEmployees } from "@/hooks/useEmployees";
+
+const employeeSchema = z.object({
+  name: z.string().min(1, "Nome é obrigatório"),
+  cpf: z.string().min(11, "CPF deve ter 11 dígitos"),
+  rg: z.string().min(1, "RG é obrigatório"),
+  phone: z.string().min(10, "Telefone é obrigatório"),
+  email: z.string().email("Email inválido"),
+  address: z.string().min(1, "Endereço é obrigatório"),
+  position: z.string().min(1, "Cargo é obrigatório"),
+  salary: z.string().min(1, "Salário é obrigatório"),
+  start_date: z.string().min(1, "Data de admissão é obrigatória"),
+});
+
+type EmployeeFormData = z.infer<typeof employeeSchema>;
+
 export default function Employees() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { createEmployee } = useEmployees();
+
+  const form = useForm<EmployeeFormData>({
+    resolver: zodResolver(employeeSchema),
+    defaultValues: {
+      name: "",
+      cpf: "",
+      rg: "",
+      phone: "",
+      email: "",
+      address: "",
+      position: "",
+      salary: "",
+      start_date: "",
+    },
+  });
+
+  const onSubmit = async (data: EmployeeFormData) => {
+    setIsLoading(true);
+    try {
+      const employeeData = {
+        ...data,
+        salary: parseFloat(data.salary.replace(/[^\d.,]/g, '').replace(',', '.')),
+      };
+      
+      await createEmployee(employeeData);
+      form.reset();
+    } catch (error) {
+      console.error('Error submitting employee:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -7,10 +66,148 @@ export default function Employees() {
         <p className="text-muted-foreground">Gerencie seus funcionários</p>
       </div>
 
-      <div className="bg-card p-6 rounded-lg border">
-        <h3 className="text-lg font-semibold mb-4">Lista de Funcionários</h3>
-        <p className="text-muted-foreground">Nenhum funcionário cadastrado</p>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Novo Funcionário</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome Completo</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nome completo" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="cpf"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>CPF</FormLabel>
+                      <FormControl>
+                        <Input placeholder="000.000.000-00" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="rg"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>RG</FormLabel>
+                      <FormControl>
+                        <Input placeholder="00.000.000-0" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Telefone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="(00) 00000-0000" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder="email@exemplo.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="position"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cargo</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Cargo do funcionário" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="salary"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Salário</FormLabel>
+                      <FormControl>
+                        <Input placeholder="R$ 0,00" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="start_date"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Data de Admissão</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Endereço Completo</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Endereço completo" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" disabled={isLoading} className="w-full">
+                {isLoading ? "Cadastrando..." : "Cadastrar Funcionário"}
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,5 +1,68 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useRentals } from "@/hooks/useRentals";
+
+const rentalSchema = z.object({
+  property_address: z.string().min(1, "Endereço é obrigatório"),
+  tenant_name: z.string().min(1, "Nome do inquilino é obrigatório"),
+  tenant_cpf: z.string().min(11, "CPF deve ter 11 dígitos"),
+  tenant_phone: z.string().min(10, "Telefone é obrigatório"),
+  tenant_email: z.string().email("Email inválido"),
+  rent_value: z.string().min(1, "Valor do aluguel é obrigatório"),
+  start_date: z.string().min(1, "Data de início é obrigatória"),
+  end_date: z.string().min(1, "Data de fim é obrigatória"),
+  deposit: z.string().optional(),
+  observations: z.string().optional(),
+});
+
+type RentalFormData = z.infer<typeof rentalSchema>;
 
 export default function RentalRegistration() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { createRental } = useRentals();
+
+  const form = useForm<RentalFormData>({
+    resolver: zodResolver(rentalSchema),
+    defaultValues: {
+      property_address: "",
+      tenant_name: "",
+      tenant_cpf: "",
+      tenant_phone: "",
+      tenant_email: "",
+      rent_value: "",
+      start_date: "",
+      end_date: "",
+      deposit: "",
+      observations: "",
+    },
+  });
+
+  const onSubmit = async (data: RentalFormData) => {
+    setIsLoading(true);
+    try {
+      const rentalData = {
+        ...data,
+        rent_value: parseFloat(data.rent_value.replace(/[^\d.,]/g, '').replace(',', '.')),
+        deposit: data.deposit ? parseFloat(data.deposit.replace(/[^\d.,]/g, '').replace(',', '.')) : undefined,
+        status: 'active'
+      };
+      
+      await createRental(rentalData);
+      form.reset();
+    } catch (error) {
+      console.error('Error submitting rental:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -7,10 +70,150 @@ export default function RentalRegistration() {
         <p className="text-muted-foreground">Cadastre novas locações</p>
       </div>
 
-      <div className="bg-card p-6 rounded-lg border">
-        <h3 className="text-lg font-semibold mb-4">Nova Locação</h3>
-        <p className="text-muted-foreground">Formulário de cadastro de locação em desenvolvimento</p>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Nova Locação</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="property_address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Endereço</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="tenant_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nome do Inquilino</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="tenant_cpf"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>CPF</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="tenant_phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Telefone</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="tenant_email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="rent_value"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Valor do Aluguel</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="start_date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data de Início</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="end_date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data de Fim</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="deposit"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Depósito</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="observations"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Observações</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" disabled={isLoading} className="w-full">
+                {isLoading ? "Cadastrando..." : "Cadastrar Locação"}
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

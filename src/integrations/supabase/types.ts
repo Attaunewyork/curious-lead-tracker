@@ -9,6 +9,135 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      clients: {
+        Row: {
+          address: string
+          city: string
+          cpf_cnpj: string
+          created_at: string
+          email: string
+          id: string
+          name: string
+          observations: string | null
+          phone: string
+          state: string
+          updated_at: string
+          zip_code: string
+        }
+        Insert: {
+          address: string
+          city: string
+          cpf_cnpj: string
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          observations?: string | null
+          phone: string
+          state: string
+          updated_at?: string
+          zip_code: string
+        }
+        Update: {
+          address?: string
+          city?: string
+          cpf_cnpj?: string
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          observations?: string | null
+          phone?: string
+          state?: string
+          updated_at?: string
+          zip_code?: string
+        }
+        Relationships: []
+      }
+      employees: {
+        Row: {
+          address: string
+          cpf: string
+          created_at: string
+          email: string
+          id: string
+          name: string
+          phone: string
+          position: string
+          rg: string
+          salary: number
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          cpf: string
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          phone: string
+          position: string
+          rg: string
+          salary: number
+          start_date: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          cpf?: string
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string
+          position?: string
+          rg?: string
+          salary?: number
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          description: string
+          expense_date: string
+          id: string
+          notes: string | null
+          property: string | null
+          updated_at: string
+          vendor: string | null
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          description: string
+          expense_date: string
+          id?: string
+          notes?: string | null
+          property?: string | null
+          updated_at?: string
+          vendor?: string | null
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          description?: string
+          expense_date?: string
+          id?: string
+          notes?: string | null
+          property?: string | null
+          updated_at?: string
+          vendor?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           company: string | null
@@ -111,6 +240,102 @@ export type Database = {
           title?: string
           updated_at?: string
           zipcode?: string | null
+        }
+        Relationships: []
+      }
+      rentals: {
+        Row: {
+          created_at: string
+          deposit: number | null
+          end_date: string
+          id: string
+          observations: string | null
+          property_address: string
+          rent_value: number
+          start_date: string
+          status: string
+          tenant_cpf: string
+          tenant_email: string
+          tenant_name: string
+          tenant_phone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deposit?: number | null
+          end_date: string
+          id?: string
+          observations?: string | null
+          property_address: string
+          rent_value: number
+          start_date: string
+          status?: string
+          tenant_cpf: string
+          tenant_email: string
+          tenant_name: string
+          tenant_phone: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deposit?: number | null
+          end_date?: string
+          id?: string
+          observations?: string | null
+          property_address?: string
+          rent_value?: number
+          start_date?: string
+          status?: string
+          tenant_cpf?: string
+          tenant_email?: string
+          tenant_name?: string
+          tenant_phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tickets: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          email: string | null
+          id: string
+          phone: string
+          priority: string
+          property_address: string
+          requested_by: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description: string
+          email?: string | null
+          id?: string
+          phone: string
+          priority?: string
+          property_address: string
+          requested_by: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          email?: string | null
+          id?: string
+          phone?: string
+          priority?: string
+          property_address?: string
+          requested_by?: string
+          status?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
