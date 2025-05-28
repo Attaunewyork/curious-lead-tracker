@@ -8,6 +8,8 @@ import { Layout } from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Leads from "./pages/Leads";
 import NewLead from "./pages/NewLead";
+import Properties from "./pages/Properties";
+import NewProperty from "./pages/NewProperty";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
@@ -29,6 +31,8 @@ const App = () => (
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/leads" element={<Leads />} />
                 <Route path="/leads/new" element={<NewLead />} />
+                <Route path="/properties" element={<Properties />} />
+                <Route path="/properties/new" element={<NewProperty />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />

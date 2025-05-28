@@ -51,6 +51,69 @@ export type Database = {
         }
         Relationships: []
       }
+      properties: {
+        Row: {
+          address: string
+          area_m2: number | null
+          available: boolean | null
+          bathrooms: number | null
+          bedrooms: number | null
+          city: string
+          created_at: string
+          description: string | null
+          furnished: boolean | null
+          id: string
+          images: string[] | null
+          parking_spaces: number | null
+          price: number | null
+          property_type: string
+          state: string
+          title: string
+          updated_at: string
+          zipcode: string | null
+        }
+        Insert: {
+          address: string
+          area_m2?: number | null
+          available?: boolean | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          city: string
+          created_at?: string
+          description?: string | null
+          furnished?: boolean | null
+          id?: string
+          images?: string[] | null
+          parking_spaces?: number | null
+          price?: number | null
+          property_type?: string
+          state: string
+          title: string
+          updated_at?: string
+          zipcode?: string | null
+        }
+        Update: {
+          address?: string
+          area_m2?: number | null
+          available?: boolean | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          city?: string
+          created_at?: string
+          description?: string | null
+          furnished?: boolean | null
+          id?: string
+          images?: string[] | null
+          parking_spaces?: number | null
+          price?: number | null
+          property_type?: string
+          state?: string
+          title?: string
+          updated_at?: string
+          zipcode?: string | null
+        }
+        Relationships: []
+      }
       webhook_logs: {
         Row: {
           body: Json | null
