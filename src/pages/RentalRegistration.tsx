@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,10 +10,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useRentals } from "@/hooks/useRentals";
 
 const rentalSchema = z.object({
-  property_address: z.string().min(1, "Endereço é obrigatório"),
-  tenant_name: z.string().min(1, "Nome do inquilino é obrigatório"),
-  tenant_cpf: z.string().min(11, "CPF deve ter 11 dígitos"),
-  tenant_phone: z.string().min(10, "Telefone é obrigatório"),
+  property_address: z.string().min(1, "Endereço do imóvel é obrigatório"),
+  tenant_name: z.string().min(1, "Nome do locatário é obrigatório"),
+  tenant_cpf: z.string().min(11, "CPF do locatário é obrigatório"),
+  tenant_phone: z.string().min(10, "Telefone do locatário é obrigatório"),
   tenant_email: z.string().email("Email inválido"),
   rent_value: z.string().min(1, "Valor do aluguel é obrigatório"),
   start_date: z.string().min(1, "Data de início é obrigatória"),
@@ -49,9 +48,17 @@ export default function RentalRegistration() {
     setIsLoading(true);
     try {
       const rentalData = {
-        ...data,
+        property_address: data.property_address,
+        tenant_name: data.tenant_name,
+        tenant_cpf: data.tenant_cpf,
+        tenant_phone: data.tenant_phone,
+        tenant_email: data.tenant_email,
         rent_value: parseFloat(data.rent_value.replace(/[^\d.,]/g, '').replace(',', '.')),
-        deposit: data.deposit ? parseFloat(data.deposit.replace(/[^\d.,]/g, '').replace(',', '.')) : undefined,
+        start_date: data.start_date,
+        end_date: data.end_date,
+        deposit: data.deposit ? parseFloat(data.deposit.replace(/[^\d.,]/g, '').replace(',', '.')) : 0,
+        observations: data.observations || null,
+        status: 'active',
       };
       
       await createRental(rentalData);
@@ -67,16 +74,16 @@ export default function RentalRegistration() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-brand-gradient">Cadastro de Locação</h1>
-        <p className="text-muted-foreground">Cadastre novas locações</p>
+        <p className="text-muted-foreground">Registre uma nova locação</p>
       </div>
 
-      <Card>
+      <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle>Nova Locação</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}

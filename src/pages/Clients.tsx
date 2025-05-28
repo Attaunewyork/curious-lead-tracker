@@ -17,8 +17,8 @@ const clientSchema = z.object({
   email: z.string().email("Email inválido"),
   address: z.string().min(1, "Endereço é obrigatório"),
   city: z.string().min(1, "Cidade é obrigatória"),
-  state: z.string().min(1, "Estado é obrigatório"),
-  zip_code: z.string().min(8, "CEP deve ter 8 dígitos"),
+  state: z.string().min(2, "Estado é obrigatório"),
+  zip_code: z.string().min(8, "CEP é obrigatório"),
   observations: z.string().optional(),
 });
 
@@ -46,7 +46,17 @@ export default function Clients() {
   const onSubmit = async (data: ClientFormData) => {
     setIsLoading(true);
     try {
-      await createClient(data);
+      await createClient({
+        name: data.name,
+        cpf_cnpj: data.cpf_cnpj,
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        city: data.city,
+        state: data.state,
+        zip_code: data.zip_code,
+        observations: data.observations || null,
+      });
       form.reset();
     } catch (error) {
       console.error('Error submitting client:', error);
@@ -92,7 +102,7 @@ export default function Clients() {
                       <FormItem>
                         <FormLabel>CPF/CNPJ</FormLabel>
                         <FormControl>
-                          <Input placeholder="000.000.000-00 ou 00.000.000/0000-00" {...field} />
+                          <Input placeholder="000.000.000-00 ou 00.000.000/0001-00" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -129,20 +139,6 @@ export default function Clients() {
 
                   <FormField
                     control={form.control}
-                    name="address"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Endereço</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Rua, número" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
                     name="city"
                     render={({ field }) => (
                       <FormItem>
@@ -162,7 +158,7 @@ export default function Clients() {
                       <FormItem>
                         <FormLabel>Estado</FormLabel>
                         <FormControl>
-                          <Input placeholder="Estado" {...field} />
+                          <Input placeholder="SP" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -186,12 +182,26 @@ export default function Clients() {
 
                 <FormField
                   control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Endereço Completo</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Endereço completo" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name="observations"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Observações (Opcional)</FormLabel>
+                      <FormLabel>Observações</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Observações sobre o cliente" {...field} />
+                        <Textarea placeholder="Observações sobre o cliente..." {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

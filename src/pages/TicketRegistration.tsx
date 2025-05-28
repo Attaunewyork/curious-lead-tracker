@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,13 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTickets } from "@/hooks/useTickets";
 
 const ticketSchema = z.object({
   title: z.string().min(1, "Título é obrigatório"),
   description: z.string().min(1, "Descrição é obrigatória"),
-  priority: z.enum(["baixa", "media", "alta", "urgente"]),
   category: z.string().min(1, "Categoria é obrigatória"),
+  priority: z.enum(["baixa", "media", "alta", "urgente"]),
   property_address: z.string().min(1, "Endereço do imóvel é obrigatório"),
   requested_by: z.string().min(1, "Solicitante é obrigatório"),
   phone: z.string().min(10, "Telefone é obrigatório"),
@@ -32,8 +32,8 @@ export default function TicketRegistration() {
     defaultValues: {
       title: "",
       description: "",
-      priority: "media",
       category: "",
+      priority: "media",
       property_address: "",
       requested_by: "",
       phone: "",
@@ -44,7 +44,19 @@ export default function TicketRegistration() {
   const onSubmit = async (data: TicketFormData) => {
     setIsLoading(true);
     try {
-      await createTicket(data);
+      const ticketData = {
+        title: data.title,
+        description: data.description,
+        category: data.category,
+        priority: data.priority,
+        property_address: data.property_address,
+        requested_by: data.requested_by,
+        phone: data.phone,
+        email: data.email || null,
+        status: 'open',
+      };
+      
+      await createTicket(ticketData);
       form.reset();
     } catch (error) {
       console.error('Error submitting ticket:', error);
@@ -56,17 +68,17 @@ export default function TicketRegistration() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-brand-gradient">Cadastro de Chamados</h1>
-        <p className="text-muted-foreground">Registre novos chamados</p>
+        <h1 className="text-3xl font-bold text-brand-gradient">Abrir Chamado</h1>
+        <p className="text-muted-foreground">Registre um novo chamado de manutenção</p>
       </div>
 
-      <Card>
+      <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle>Novo Chamado</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -187,7 +199,7 @@ export default function TicketRegistration() {
               />
 
               <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? "Registrando..." : "Registrar Chamado"}
+                {isLoading ? "Abrindo Chamado..." : "Abrir Chamado"}
               </Button>
             </form>
           </Form>

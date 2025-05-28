@@ -46,8 +46,15 @@ export default function Employees() {
     setIsLoading(true);
     try {
       const employeeData = {
-        ...data,
+        name: data.name,
+        cpf: data.cpf,
+        rg: data.rg,
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        position: data.position,
         salary: parseFloat(data.salary.replace(/[^\d.,]/g, '').replace(',', '.')),
+        start_date: data.start_date,
       };
       
       await createEmployee(employeeData);
