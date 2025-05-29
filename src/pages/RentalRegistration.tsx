@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useRentals } from "@/hooks/useRentals";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const rentalSchema = z.object({
   property_address: z.string().min(1, "Endereço do imóvel é obrigatório"),
@@ -26,6 +27,8 @@ type RentalFormData = z.infer<typeof rentalSchema>;
 
 export default function RentalRegistration() {
   const [isLoading, setIsLoading] = useState(false);
+  const [propertyImages, setPropertyImages] = useState<string[]>([]);
+  const [featuredImage, setFeaturedImage] = useState<string>("");
   const { createRental } = useRentals();
 
   const form = useForm<RentalFormData>({
@@ -63,6 +66,8 @@ export default function RentalRegistration() {
       
       await createRental(rentalData);
       form.reset();
+      setPropertyImages([]);
+      setFeaturedImage("");
     } catch (error) {
       console.error('Error submitting rental:', error);
     } finally {
@@ -84,6 +89,18 @@ export default function RentalRegistration() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <FormLabel>Fotos do Imóvel</FormLabel>
+                  <ImageUpload
+                    images={propertyImages}
+                    onImagesChange={setPropertyImages}
+                    featuredImage={featuredImage}
+                    onFeaturedImageChange={setFeaturedImage}
+                  />
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}

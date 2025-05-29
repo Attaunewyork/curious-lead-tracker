@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useEmployees } from "@/hooks/useEmployees";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const employeeSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -25,6 +25,7 @@ type EmployeeFormData = z.infer<typeof employeeSchema>;
 
 export default function Employees() {
   const [isLoading, setIsLoading] = useState(false);
+  const [employeeImages, setEmployeeImages] = useState<string[]>([]);
   const { employees, createEmployee } = useEmployees();
 
   const form = useForm<EmployeeFormData>({
@@ -59,6 +60,7 @@ export default function Employees() {
       
       await createEmployee(employeeData);
       form.reset();
+      setEmployeeImages([]);
     } catch (error) {
       console.error('Error submitting employee:', error);
     } finally {
@@ -81,6 +83,16 @@ export default function Employees() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <div className="space-y-4">
+                  <div>
+                    <FormLabel>Foto do Funcionário</FormLabel>
+                    <ImageUpload
+                      images={employeeImages}
+                      onImagesChange={setEmployeeImages}
+                    />
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}

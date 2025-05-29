@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useClients } from "@/hooks/useClients";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const clientSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -26,6 +26,7 @@ type ClientFormData = z.infer<typeof clientSchema>;
 
 export default function Clients() {
   const [isLoading, setIsLoading] = useState(false);
+  const [clientImages, setClientImages] = useState<string[]>([]);
   const { clients, createClient } = useClients();
 
   const form = useForm<ClientFormData>({
@@ -58,6 +59,7 @@ export default function Clients() {
         observations: data.observations || null,
       });
       form.reset();
+      setClientImages([]);
     } catch (error) {
       console.error('Error submitting client:', error);
     } finally {
@@ -80,6 +82,16 @@ export default function Clients() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <div className="space-y-4">
+                  <div>
+                    <FormLabel>Foto do Cliente</FormLabel>
+                    <ImageUpload
+                      images={clientImages}
+                      onImagesChange={setClientImages}
+                    />
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
