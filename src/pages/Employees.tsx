@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,14 +12,14 @@ import { ImageUpload } from "@/components/ImageUpload";
 
 const employeeSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
-  cpf: z.string().min(11, "CPF deve ter 11 dígitos"),
+  cpf: z.string().min(11, "CPF é obrigatório"),
   rg: z.string().min(1, "RG é obrigatório"),
   phone: z.string().min(10, "Telefone é obrigatório"),
   email: z.string().email("Email inválido"),
   address: z.string().min(1, "Endereço é obrigatório"),
   position: z.string().min(1, "Cargo é obrigatório"),
   salary: z.string().min(1, "Salário é obrigatório"),
-  start_date: z.string().min(1, "Data de admissão é obrigatória"),
+  start_date: z.string().min(1, "Data de início é obrigatória"),
 });
 
 type EmployeeFormData = z.infer<typeof employeeSchema>;
@@ -46,7 +47,7 @@ export default function Employees() {
   const onSubmit = async (data: EmployeeFormData) => {
     setIsLoading(true);
     try {
-      const employeeData = {
+      await createEmployee({
         name: data.name,
         cpf: data.cpf,
         rg: data.rg,
@@ -56,9 +57,7 @@ export default function Employees() {
         position: data.position,
         salary: parseFloat(data.salary.replace(/[^\d.,]/g, '').replace(',', '.')),
         start_date: data.start_date,
-      };
-      
-      await createEmployee(employeeData);
+      });
       form.reset();
       setEmployeeImages([]);
     } catch (error) {
@@ -91,6 +90,23 @@ export default function Employees() {
                       onImagesChange={setEmployeeImages}
                     />
                   </div>
+
+                  {employeeImages.length > 0 && (
+                    <div className="space-y-2">
+                      <FormLabel>Imagem Carregada:</FormLabel>
+                      <div className="grid grid-cols-1 gap-2">
+                        {employeeImages.map((image, index) => (
+                          <div key={index} className="relative">
+                            <img 
+                              src={image} 
+                              alt={`Foto do funcionário ${index + 1}`}
+                              className="w-full h-32 object-cover rounded-lg border"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -99,7 +115,7 @@ export default function Employees() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nome Completo</FormLabel>
+                        <FormLabel>Nome</FormLabel>
                         <FormControl>
                           <Input placeholder="Nome completo" {...field} />
                         </FormControl>
@@ -171,7 +187,7 @@ export default function Employees() {
                       <FormItem>
                         <FormLabel>Cargo</FormLabel>
                         <FormControl>
-                          <Input placeholder="Cargo do funcionário" {...field} />
+                          <Input placeholder="Ex: Corretor, Gerente" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -197,7 +213,7 @@ export default function Employees() {
                     name="start_date"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Data de Admissão</FormLabel>
+                        <FormLabel>Data de Início</FormLabel>
                         <FormControl>
                           <Input type="date" {...field} />
                         </FormControl>
@@ -212,7 +228,7 @@ export default function Employees() {
                   name="address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Endereço Completo</FormLabel>
+                      <FormLabel>Endereço</FormLabel>
                       <FormControl>
                         <Input placeholder="Endereço completo" {...field} />
                       </FormControl>
@@ -231,27 +247,17 @@ export default function Employees() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Funcionários Recentes</CardTitle>
+            <CardTitle>Funcionários Cadastrados</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {employees.length > 0 ? (
-                employees.slice(0, 5).map((employee) => (
-                  <div key={employee.id} className="border rounded-lg p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-medium">{employee.name}</h4>
-                      <span className="text-sm text-muted-foreground">{employee.position}</span>
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      <p>Email: {employee.email}</p>
-                      <p>Telefone: {employee.phone}</p>
-                      <p>Salário: R$ {employee.salary.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground text-center">Nenhum funcionário cadastrado</p>
-              )}
+              {employees?.map((employee) => (
+                <div key={employee.id} className="border rounded-lg p-4">
+                  <h3 className="font-semibold">{employee.name}</h3>
+                  <p className="text-sm text-muted-foreground">{employee.position}</p>
+                  <p className="text-sm text-muted-foreground">{employee.email}</p>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>

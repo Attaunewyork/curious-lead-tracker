@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useRentals } from "@/hooks/useRentals";
 import { ImageUpload } from "@/components/ImageUpload";
+import { Badge } from "@/components/ui/badge";
 
 const rentalSchema = z.object({
   property_address: z.string().min(1, "Endereço do imóvel é obrigatório"),
@@ -99,6 +101,28 @@ export default function RentalRegistration() {
                     onFeaturedImageChange={setFeaturedImage}
                   />
                 </div>
+
+                {propertyImages.length > 0 && (
+                  <div className="space-y-2">
+                    <FormLabel>Imagens Carregadas:</FormLabel>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                      {propertyImages.map((image, index) => (
+                        <div key={index} className="relative">
+                          <img 
+                            src={image} 
+                            alt={`Foto do imóvel ${index + 1}`}
+                            className="w-full h-24 object-cover rounded-lg border"
+                          />
+                          {featuredImage === image && (
+                            <Badge className="absolute top-1 right-1 text-xs">
+                              Destaque
+                            </Badge>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

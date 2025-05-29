@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -90,6 +91,23 @@ export default function Clients() {
                       onImagesChange={setClientImages}
                     />
                   </div>
+
+                  {clientImages.length > 0 && (
+                    <div className="space-y-2">
+                      <FormLabel>Imagem Carregada:</FormLabel>
+                      <div className="grid grid-cols-1 gap-2">
+                        {clientImages.map((image, index) => (
+                          <div key={index} className="relative">
+                            <img 
+                              src={image} 
+                              alt={`Foto do cliente ${index + 1}`}
+                              className="w-full h-32 object-cover rounded-lg border"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -98,9 +116,9 @@ export default function Clients() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nome/Razão Social</FormLabel>
+                        <FormLabel>Nome</FormLabel>
                         <FormControl>
-                          <Input placeholder="Nome completo ou razão social" {...field} />
+                          <Input placeholder="Nome completo" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -114,7 +132,7 @@ export default function Clients() {
                       <FormItem>
                         <FormLabel>CPF/CNPJ</FormLabel>
                         <FormControl>
-                          <Input placeholder="000.000.000-00 ou 00.000.000/0001-00" {...field} />
+                          <Input placeholder="000.000.000-00" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -143,6 +161,20 @@ export default function Clients() {
                         <FormLabel>Email</FormLabel>
                         <FormControl>
                           <Input type="email" placeholder="email@exemplo.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Endereço</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Endereço completo" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -194,26 +226,12 @@ export default function Clients() {
 
                 <FormField
                   control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Endereço Completo</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Endereço completo" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
                   name="observations"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Observações</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Observações sobre o cliente..." {...field} />
+                        <Textarea placeholder="Observações sobre o cliente" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -230,27 +248,17 @@ export default function Clients() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Clientes Recentes</CardTitle>
+            <CardTitle>Clientes Cadastrados</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {clients.length > 0 ? (
-                clients.slice(0, 5).map((client) => (
-                  <div key={client.id} className="border rounded-lg p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-medium">{client.name}</h4>
-                      <span className="text-sm text-muted-foreground">{client.cpf_cnpj}</span>
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      <p>Email: {client.email}</p>
-                      <p>Telefone: {client.phone}</p>
-                      <p>Cidade: {client.city}, {client.state}</p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground text-center">Nenhum cliente cadastrado</p>
-              )}
+              {clients?.map((client) => (
+                <div key={client.id} className="border rounded-lg p-4">
+                  <h3 className="font-semibold">{client.name}</h3>
+                  <p className="text-sm text-muted-foreground">{client.email}</p>
+                  <p className="text-sm text-muted-foreground">{client.phone}</p>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
