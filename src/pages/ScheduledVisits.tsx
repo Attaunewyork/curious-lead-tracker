@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +21,18 @@ const visitSchema = z.object({
 
 type VisitFormData = z.infer<typeof visitSchema>;
 
-const mockVisits = [
+interface Visit {
+  id: number;
+  client_name: string;
+  client_phone: string;
+  property_address: string;
+  visit_date: string;
+  visit_time: string;
+  status: string;
+  notes: string;
+}
+
+const mockVisits: Visit[] = [
   {
     id: 1,
     client_name: "João Silva",
@@ -47,7 +57,7 @@ const mockVisits = [
 
 export default function ScheduledVisits() {
   const [isLoading, setIsLoading] = useState(false);
-  const [visits, setVisits] = useState(mockVisits);
+  const [visits, setVisits] = useState<Visit[]>(mockVisits);
 
   const form = useForm<VisitFormData>({
     resolver: zodResolver(visitSchema),
@@ -64,9 +74,14 @@ export default function ScheduledVisits() {
   const onSubmit = async (data: VisitFormData) => {
     setIsLoading(true);
     try {
-      const newVisit = {
+      const newVisit: Visit = {
         id: visits.length + 1,
-        ...data,
+        client_name: data.client_name,
+        client_phone: data.client_phone,
+        property_address: data.property_address,
+        visit_date: data.visit_date,
+        visit_time: data.visit_time,
+        notes: data.notes || "",
         status: "agendada"
       };
       setVisits([...visits, newVisit]);
