@@ -14,6 +14,15 @@ export default function Rentals() {
     rental.tenant_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(value);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -55,7 +64,7 @@ export default function Rentals() {
                   <div>
                     <p className="text-sm text-muted-foreground">Valor</p>
                     <p className="font-medium text-green-600">
-                      R$ {rental.rent_value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                      {formatCurrency(rental.rent_value)}
                     </p>
                   </div>
                   <div>
