@@ -54,6 +54,69 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_customers: {
+        Row: {
+          address: string | null
+          city: string | null
+          company: string | null
+          cpf_cnpj: string | null
+          created_at: string | null
+          email: string
+          id: string
+          last_quote_date: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          state: string | null
+          total_quotes: number | null
+          total_value: number | null
+          updated_at: string | null
+          user_id: string | null
+          whatsapp: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          company?: string | null
+          cpf_cnpj?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          last_quote_date?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          state?: string | null
+          total_quotes?: number | null
+          total_value?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          whatsapp?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          company?: string | null
+          cpf_cnpj?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          last_quote_date?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          state?: string | null
+          total_quotes?: number | null
+          total_value?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          whatsapp?: string | null
+          zip_code?: string | null
+        }
+        Relationships: []
+      }
       employees: {
         Row: {
           address: string
@@ -180,6 +243,42 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          price: number
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          price: number
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          price?: number
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       properties: {
         Row: {
           address: string
@@ -242,6 +341,138 @@ export type Database = {
           zipcode?: string | null
         }
         Relationships: []
+      }
+      quote_templates: {
+        Row: {
+          accent_color: string | null
+          background_color: string | null
+          border_style: string | null
+          border_width: number | null
+          company_name: string
+          created_at: string
+          font_family: string | null
+          header_text: string
+          id: string
+          is_default: boolean
+          logo_text: string
+          name: string
+          primary_color: string
+          secondary_color: string
+          text_color: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          accent_color?: string | null
+          background_color?: string | null
+          border_style?: string | null
+          border_width?: number | null
+          company_name?: string
+          created_at?: string
+          font_family?: string | null
+          header_text?: string
+          id?: string
+          is_default?: boolean
+          logo_text?: string
+          name: string
+          primary_color?: string
+          secondary_color?: string
+          text_color?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          accent_color?: string | null
+          background_color?: string | null
+          border_style?: string | null
+          border_width?: number | null
+          company_name?: string
+          created_at?: string
+          font_family?: string | null
+          header_text?: string
+          id?: string
+          is_default?: boolean
+          logo_text?: string
+          name?: string
+          primary_color?: string
+          secondary_color?: string
+          text_color?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      quotes: {
+        Row: {
+          category: string
+          created_at: string
+          customer_email: string
+          customer_id: string | null
+          customer_name: string
+          customer_phone: string | null
+          id: string
+          items: Json
+          margin_percentage: number
+          observations: string | null
+          status: string
+          subtotal: number
+          template_id: string | null
+          total: number
+          updated_at: string
+          use_margin: boolean | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          customer_email: string
+          customer_id?: string | null
+          customer_name: string
+          customer_phone?: string | null
+          id?: string
+          items: Json
+          margin_percentage?: number
+          observations?: string | null
+          status?: string
+          subtotal: number
+          template_id?: string | null
+          total: number
+          updated_at?: string
+          use_margin?: boolean | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          customer_email?: string
+          customer_id?: string | null
+          customer_name?: string
+          customer_phone?: string | null
+          id?: string
+          items?: Json
+          margin_percentage?: number
+          observations?: string | null
+          status?: string
+          subtotal?: number
+          template_id?: string | null
+          total?: number
+          updated_at?: string
+          use_margin?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "quote_templates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       rentals: {
         Row: {
@@ -333,6 +564,42 @@ export type Database = {
         }
         Relationships: []
       }
+      subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          stripe_customer_id: string | null
+          subscribed: boolean
+          subscription_end: string | null
+          subscription_tier: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          stripe_customer_id?: string | null
+          subscribed?: boolean
+          subscription_end?: string | null
+          subscription_tier?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          stripe_customer_id?: string | null
+          subscribed?: boolean
+          subscription_end?: string | null
+          subscription_tier?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       tickets: {
         Row: {
           category: string
@@ -375,6 +642,33 @@ export type Database = {
           status?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      user_margin_settings: {
+        Row: {
+          created_at: string | null
+          id: string
+          margin_percentage: number | null
+          updated_at: string | null
+          use_margin: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          margin_percentage?: number | null
+          updated_at?: string | null
+          use_margin?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          margin_percentage?: number | null
+          updated_at?: string | null
+          use_margin?: boolean | null
+          user_id?: string | null
         }
         Relationships: []
       }
