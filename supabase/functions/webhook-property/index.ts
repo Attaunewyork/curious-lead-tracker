@@ -14,6 +14,7 @@ serve(async (req) => {
   }
 
   try {
+    // Initialize Supabase client with service role key for admin operations
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -30,81 +31,123 @@ serve(async (req) => {
     let responseStatus = 200
     let responseBody = { success: true }
 
+    // Parse JSON body
     try {
-      body = await req.json()
+      const text = await req.text()
+      if (text) {
+        body = JSON.parse(text)
+      }
     } catch (e) {
-      console.log('No JSON body or invalid JSON')
+      console.log('No JSON body or invalid JSON:', e)
+      if (method === 'POST') {
+        responseStatus = 400
+        responseBody = { 
+          error: 'JSON inválido no corpo da requisição',
+          success: false 
+        }
+      }
     }
 
-    // Log the webhook request and get the log ID
-    const { data: logData, error: logError } = await supabaseClient
-      .from('webhook_logs')
-      .insert({
-        endpoint: url.pathname,
-        method,
-        headers,
-        body,
-        ip_address: clientIP,
-        user_agent: userAgent
-      })
-      .select('id')
-      .single()
+    console.log('Webhook request received:', {
+      method,
+      endpoint: url.pathname,
+      body,
+      headers: Object.keys(headers)
+    })
 
-    if (logError) {
-      console.error('Error creating webhook log:', logError)
+    // Log the webhook request
+    let logId = null
+    try {
+      const { data: logData, error: logError } = await supabaseClient
+        .from('webhook_logs')
+        .insert({
+          endpoint: url.pathname,
+          method,
+          headers,
+          body,
+          ip_address: clientIP,
+          user_agent: userAgent
+        })
+        .select('id')
+        .single()
+
+      if (logError) {
+        console.error('Error creating webhook log:', logError)
+      } else {
+        logId = logData?.id
+      }
+    } catch (logErr) {
+      console.error('Failed to create webhook log:', logErr)
     }
 
     // Only process POST requests to create properties
-    if (method === 'POST') {
+    if (method === 'POST' && responseStatus === 200) {
       // Validate required fields
       if (!body || !body.title || !body.address || !body.city || !body.state) {
         responseStatus = 400
         responseBody = { 
           error: 'Campos obrigatórios: title, address, city, state',
+          received: body,
           success: false 
         }
       } else {
-        // Create property in database
-        const propertyData = {
-          title: body.title,
-          description: body.description || null,
-          property_type: body.property_type || 'casa',
-          price: body.price ? parseFloat(body.price) : null,
-          address: body.address,
-          city: body.city,
-          state: body.state,
-          zipcode: body.zipcode || null,
-          bedrooms: body.bedrooms ? parseInt(body.bedrooms) : null,
-          bathrooms: body.bathrooms ? parseInt(body.bathrooms) : null,
-          area_m2: body.area_m2 ? parseFloat(body.area_m2) : null,
-          parking_spaces: body.parking_spaces ? parseInt(body.parking_spaces) : 0,
-          furnished: body.furnished === true || body.furnished === 'true' || false,
-          available: body.available !== false && body.available !== 'false',
-          images: body.images || null
-        }
+        try {
+          // Prepare property data with proper type conversion and defaults
+          const propertyData = {
+            title: String(body.title).trim(),
+            description: body.description ? String(body.description).trim() : null,
+            property_type: body.property_type ? String(body.property_type) : 'casa',
+            price: body.price ? parseFloat(String(body.price)) : null,
+            address: String(body.address).trim(),
+            city: String(body.city).trim(),
+            state: String(body.state).trim(),
+            zipcode: body.zipcode ? String(body.zipcode).trim() : null,
+            bedrooms: body.bedrooms ? parseInt(String(body.bedrooms)) : null,
+            bathrooms: body.bathrooms ? parseInt(String(body.bathrooms)) : null,
+            area_m2: body.area_m2 ? parseFloat(String(body.area_m2)) : null,
+            parking_spaces: body.parking_spaces ? parseInt(String(body.parking_spaces)) : 0,
+            furnished: body.furnished === true || body.furnished === 'true',
+            available: body.available !== false && body.available !== 'false',
+            images: Array.isArray(body.images) ? body.images : null
+          }
 
-        const { data, error } = await supabaseClient
-          .from('properties')
-          .insert(propertyData)
-          .select()
+          console.log('Creating property with data:', propertyData)
 
-        if (error) {
-          console.error('Error inserting property:', error)
+          // Create property in database
+          const { data, error } = await supabaseClient
+            .from('properties')
+            .insert(propertyData)
+            .select()
+            .single()
+
+          if (error) {
+            console.error('Error inserting property:', error)
+            responseStatus = 500
+            responseBody = { 
+              error: 'Erro ao criar imóvel',
+              details: error.message,
+              code: error.code,
+              success: false 
+            }
+          } else {
+            console.log('Property created successfully:', data)
+            responseBody = { 
+              message: 'Imóvel criado com sucesso',
+              property: data,
+              success: true 
+            }
+          }
+        } catch (insertError) {
+          console.error('Exception while creating property:', insertError)
           responseStatus = 500
           responseBody = { 
-            error: 'Erro ao criar imóvel',
-            details: error.message,
+            error: 'Erro interno ao processar dados do imóvel',
+            details: insertError.message,
             success: false 
-          }
-        } else {
-          responseBody = { 
-            message: 'Imóvel criado com sucesso',
-            property: data[0],
-            success: true 
           }
         }
       }
-    } else {
+    } else if (method !== 'POST') {
       responseStatus = 405
       responseBody = { 
         error: 'Método não permitido. Use POST.',
@@ -113,15 +156,21 @@ serve(async (req) => {
     }
 
     // Update log with response if we have a log ID
-    if (logData?.id) {
-      await supabaseClient
-        .from('webhook_logs')
-        .update({
-          response_status: responseStatus,
-          response_body: responseBody
-        })
-        .eq('id', logData.id)
+    if (logId) {
+      try {
+        await supabaseClient
+          .from('webhook_logs')
+          .update({
+            response_status: responseStatus,
+            response_body: responseBody
+          })
+          .eq('id', logId)
+      } catch (updateErr) {
+        console.error('Failed to update webhook log:', updateErr)
+      }
     }
+
+    console.log('Sending response:', { status: responseStatus, body: responseBody })
 
     return new Response(
       JSON.stringify(responseBody),
@@ -137,6 +186,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: 'Erro interno do servidor',
+        details: error.message,
         success: false 
       }),
       {
