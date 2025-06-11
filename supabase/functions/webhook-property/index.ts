@@ -36,8 +36,8 @@ serve(async (req) => {
       console.log('No JSON body or invalid JSON')
     }
 
-    // Log the webhook request
-    await supabaseClient
+    // Log the webhook request and get the log ID
+    const { data: logData, error: logError } = await supabaseClient
       .from('webhook_logs')
       .insert({
         endpoint: url.pathname,
@@ -47,6 +47,12 @@ serve(async (req) => {
         ip_address: clientIP,
         user_agent: userAgent
       })
+      .select('id')
+      .single()
+
+    if (logError) {
+      console.error('Error creating webhook log:', logError)
+    }
 
     // Only process POST requests to create properties
     if (method === 'POST') {
@@ -106,14 +112,16 @@ serve(async (req) => {
       }
     }
 
-    // Update log with response
-    await supabaseClient
-      .from('webhook_logs')
-      .update({
-        response_status: responseStatus,
-        response_body: responseBody
-      })
-      .eq('created_at', new Date().toISOString().split('.')[0] + 'Z')
+    // Update log with response if we have a log ID
+    if (logData?.id) {
+      await supabaseClient
+        .from('webhook_logs')
+        .update({
+          response_status: responseStatus,
+          response_body: responseBody
+        })
+        .eq('id', logData.id)
+    }
 
     return new Response(
       JSON.stringify(responseBody),
