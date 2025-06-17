@@ -16,6 +16,7 @@ import Clients from "./pages/Clients";
 import Employees from "./pages/Employees";
 import Properties from "./pages/Properties";
 import NewProperty from "./pages/NewProperty";
+import PublicProperties from "./pages/PublicProperties";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
@@ -42,6 +43,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/auth" element={<Auth />} />
+            <Route path="/imoveis" element={<PublicProperties />} />
             <Route path="/*" element={
               <Layout>
                 <Routes>
